@@ -1,31 +1,24 @@
-//your JS code here. If required.
-const fontSize = document.querySelector("#fontsize");
-const fontColor = document.querySelector("#fontcolor");
-const btn = document.querySelector('input[type="submit"]')
+const fontSizeInput = document.querySelector("#fontsize");
+const fontColorInput = document.querySelector("#fontcolor");
+const btn = document.querySelector('input[type="submit"]');
 
+btn.addEventListener("click", (e) => {
+    document.body.style.fontSize = fontSizeInput.value + "px";
+    document.body.style.color = fontColorInput.value;
 
-btn.addEventListener("click",(e)=>{
+    setCookie("fontsize", fontSizeInput.value, 365);
+    setCookie("fontcolor", fontColorInput.value, 365);
+});
 
-    document.body.style.fontSize = fontSize.value + "px";
-    document.body.style.color = fontColor.value;
-   
-    setcookies("fontsize",fontSize.value,365)
-    setcookies("fontcolor",fontColor.value,365);
-})
-
-function setcookies(Name,value,days){
-
+function setCookie(name, value, days) {
     let expires = "";
-    if(days){
+    if (days) {
         let date = new Date();
-        date.setTime(date.getTime()+ (days * 24* 60 * 60* 1000));
-        
-        expires = "; expires="+date.toUTCString();
+        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+        expires = "; expires=" + date.toUTCString();
+    }
 
-    
-    }   
-
-    document.cookie = Name + "="+ value + expires + "; path=/";
+    document.cookie = name + "=" + value + expires + "; path=/";
 }
 
 function getCookie(name) {
@@ -39,19 +32,21 @@ function getCookie(name) {
     return null;
 }
 
-function loadPreference(){
-    let fontSizes = getCookie("fontSize");
-    let fontColors = getCookie("fontColor");
+function loadPreferences() {
+    let fontSize = getCookie("fontsize"); // Corrected the cookie name here
+    let fontColor = getCookie("fontcolor"); // Corrected the cookie name here
 
     // Apply preferences if cookies exist
-    if (fontSizes) {
-        document.body.style.fontSizes = fontSizes + "px";
-        document.getElementById("fontSize").value = fontSizes;
+    if (fontSize) {
+        document.body.style.fontSize = fontSize + "px";
+        fontSizeInput.value = fontSize;
     }
 
-    if (fontColors) {
-        document.body.style.color = fontColors;
-        document.getElementById("fontColor").value = fontColors;
+    if (fontColor) {
+        document.body.style.color = fontColor;
+        fontColorInput.value = fontColor;
     }
-
 }
+
+// Call loadPreferences on page load
+window.onload = loadPreferences;
